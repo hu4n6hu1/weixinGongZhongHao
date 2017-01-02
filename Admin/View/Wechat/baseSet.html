@@ -7,8 +7,7 @@
 <li class="active"><a data-toggle="tab" href="#home1">基本信息</a></li>
 <li><a data-toggle="tab" href="#home2">菜单管理</a></li>
 <li><a data-toggle="tab" href="#home3">添加/修改菜单</a></li>
-<li><a data-toggle="tab" href="#home4">自定义回复</a></li>
-<li><a data-toggle="tab" href="#home5">添加/修改自定义回复</a></li>
+
 </ul>
 </div>
 </div>
@@ -201,117 +200,6 @@ type="submit">提交</button>
 </form>
 </div>
 
-<div id="home4" class="tab-pane in">
-<div class="row">
-<div class="col-xs-12">
-<div class="table-responsive">
-<table id="sample-table-1"
-class="table table-striped table-bordered table-hover">
-<thead>
-<tr>
-<th class="center"><label> <input
-type="checkbox" class="ace"> <span class="lbl"></span>
-</label></th>
-<th>ID</th>
-<th>类型</th>
-<th>标题</th>
-<th>描述</th>
-<th>图片</th>
-<th>URL</th>
-<th>关键词</th>
-<th>操作</th>
-</tr>
-
-</thead>
-
-<tbody>
-<volist name="message" id="message">
-<tr>
-<td class="center"><label> <input
-type="checkbox" class="ace"> <span class="lbl"></span>
-</label></td>
-<th>{$message.id}</th>
-<th>{$message.type}</th>
-<th>{$message.title}</th>
-<th>{$message.description}</th>
-<th>
-<div class="btn-group">
-<a class="btn btn-white btn-sm" data-toggle="dropdown">
-预览
-</a>
-<div class="dropdown-menu" role="menu">
-<center><img style="padding: 0px 0px 6px 0px;max-width:200px;max-height:200px;" src="__PUBLIC__{$message.savepath}{$message.picurl}"/></center>
-</div>
-</div>
-</th>
-<th>{$message.url}</th>
-<th>{$message.key}</th>
-<td><a
-href="javascript:void(0);" onclick="reWxmessage(this)"
-class="btn btn-white btn-sm">修改</a><a
-class="J_ajax_del btn btn-white btn-sm"
-href="{:U('Admin/Weixin/delmessage',array('id'=>$message['id']))}">删除</a></td>
-</tr>
-</volist>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-</div>
-<div id="home5" class="tab-pane in">
-<form class="form-horizontal J_ajaxForm" enctype="multipart/form-data" id="myform" action="{:U('Admin/Weixin/addmessage')}" method="post">
-<div class="tabbable">
-<div class="tab-content">
-<div class="tab-pane active">
-<table cellpadding="2" cellspacing="2" width="100%">
-<tbody>
-<tr>
-<td width="180">类型:</td>
-<td><select name="type" class="normal_select">
-<option value="0">图文</option>
-<option value="1">文本</option>
-</select></td>
-</tr>
-<tr>
-<td>标题:</td>
-<td><input type="text" class="input" name="title"
-value="" id="name" >
-<input type="hidden" class="input" name="message_id"
-value="0" ></td>
-</tr>
-<tr>
-<td>描述:</td>
-<td><textarea name="description" rows="8" cols="32"></textarea></td>
-</tr>
-<tr>
-<td>图片:</td>
-<td><input multiple="multiple" type="file" name="picurl">
-<p class="help-block">允许的附件文件类型: jpg,gif,png,jpeg并且图片大小小于200k.</p></td>
-</tr>
-<tr>
-<td>URL</td>
-
-<td><input type="text" class="input" name="url"
- value="" autocomplete="off">
-</td>
-</tr>
-<tr>
-<td>关键词</td>
-<td><input type="text" class="input" name="key"></td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-</div>
-<div class="form-actions">
-<button class="btn btn-primary btn_submit J_ajax_submit_btn"
-type="submit">提交</button>
-<a class="btn" href="">返回</a>
-</div>
-</form>
-</div>
 </div>
 </div>
 </div>

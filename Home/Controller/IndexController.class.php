@@ -25,13 +25,15 @@ class IndexController extends Controller {
 		}
 	}
     
-	public function test(){
-		//Hook::listen('test');
-		Hook::add('execute','Addons\Test\TestAddon');
-		Hook::add('index','Addon\SystemInfo\Controller\InfoController');
-	
-		Hook::listen('execute');
-		Hook::listen('index');
+	public function plugins(){
+		
+		Hook::add('executePlugin','Addons\Test\TestAddon');
+		Hook::add('executePlugin','Addons\Admin\AdminAddon');
+		
+		$a='axxxx';
+		$b=Hook::listen('executePlugin',$a);
+		var_dump($b);
+
 
 	}
 	

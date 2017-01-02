@@ -4,8 +4,8 @@
 		$('.nav.nav-list li').eq(1).click(function() {
 			$('.nav.nav-list li').removeClass('active');
 			$(this).addClass('active');
-			$('#breadcrumbs ul li').eq(1).html('用户管理');
-			$('#main_iframe').attr("src","{:U('Admin/User/userList')}");
+			$('#breadcrumbs ul li').eq(1).html('插件管理');
+			$('#main_iframe').attr("src","{:U('Admin/Plugins/PluginsList')}");
 		});
 		/* 微信管理 */
 		$('.nav.nav-list li').eq(2).click(function() {
