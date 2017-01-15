@@ -23,18 +23,12 @@ class IndexController extends Controller {
 			  $wechatObj->responseMsg($msg);
 		}
 		}
+		$this->plugins($wechatObj->getNormalMsg());
 	}
     
-	public function plugins(){
-		
-		Hook::add('executePlugin','Addons\Test\TestAddon');
-		Hook::add('executePlugin','Addons\Admin\AdminAddon');
-		
-		$a='axxxx';
-		$b=Hook::listen('executePlugin',$a);
-		var_dump($b);
-
-
+	protected  function plugins($argument){
+		$param=$argument;
+		Hook::listen('executePlugin',$param);
 	}
 	
 }

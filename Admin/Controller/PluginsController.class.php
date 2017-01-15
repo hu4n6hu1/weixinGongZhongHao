@@ -4,22 +4,60 @@ use Think\Controller;
 use Think\Hook;
 use Addons;
 class PluginsController extends Controller {
+	protected $initHook=array('init'=>array());
+	protected $executeHook=array('executePlugin'=>array());
+	
 	public function PluginsList(){
-		$baseDir=dirname(__FILE__);
-		$baseDir=str_replace('\\','/',$baseDir);
-		$baseDir=substr($baseDir,-1)=='/'?$baseDir:$baseDir.'/';
+		$baseDir=self::getBaseDir();
 		$baseDir=$baseDir.'..\\..\\Addons\\';
 		$scanObj=D('ScanPlugins');
 		$pluginsList=$scanObj->getPluginsList($baseDir);
 		$pluginsParam=array();
 		foreach($pluginsList as $plugin){
-
-			Hook::add('getPluginInfo',"Addons\\$plugin\\$plugin"."Addon");
+			$pluginPath="Addons\\$plugin\\$plugin"."Addon";
+			Hook::add('getPluginInfo',$pluginPath);
+			$this->executeHook['executePlugin'][]=$pluginPath;		
+			$installLocks=$baseDir."$plugin\\install.locks";
+			if(!file_exists($installLocks)){
+			$this->initHook['init'][]=$pluginPath;				
+			}
 		}
 		
+		$this->addHook($this->initHook);
+		$this->addHook($this->executeHook);
+	
+		$pluginsInfo=$this->getPluginsInfo();
+		$this->assign('pluginsInfo',$pluginsInfo);
+		$this->display('pluginsList');	
+		
+	}
+	
+	public function pluginInit(){
+		Hook::listen('init');
+		$this->PluginsList();
+	}
+	
+	protected function addHook($hook){
+		$FileConfigObj= new \Admin\Model\FileConfigModel('tags.php');
+		$fileContents=$FileConfigObj->addConfig($hook);
+		$fileContents=$FileConfigObj->saveConfig();
+
+	}
+	
+	protected static function getBaseDir(){
+		$baseDir=dirname(__FILE__);
+		$baseDir=str_replace('\\','/',$baseDir);
+		$baseDir=substr($baseDir,-1)=='/'?$baseDir:$baseDir.'/';
+		return $baseDir;
+	}
+	
+	
+	
+	protected function getPluginsInfo(){
 		$pulginsList=Hook::get('getPluginInfo');
 		$pluginsInfo=array();
 		$i=0;
+		$baseDir=self::getBaseDir();
 		foreach($pulginsList as $plugin){
 			/* $obj=new $plugin();
 			$pluginsInfo[]=$obj->getPluginInfo(); 
@@ -30,43 +68,16 @@ class PluginsController extends Controller {
 			$method = $class->getMethod('getPluginInfo');
 			$pluginsInfo[$i]=$method->invoke($class->newInstance());
 			$pluginsInfo[$i]['address']=$plugin.'class.php';
-			$baseDir=dirname(__FILE__);
-			$baseDir=str_replace('\\','/',$baseDir);
-			$baseDir=substr($baseDir,-1)=='/'?$baseDir:$baseDir.'/';
+			
 			$path=$baseDir.'..\..\\'.dirname($plugin).'\install.locks';
 			$status=file_exists($path);
 			$pluginsInfo[$i]['status']=$status;
 			$i++;
 		}
-		$this->assign('pluginsInfo',$pluginsInfo);
-		$this->display('pluginsList');
-		
+		return $pluginsInfo;
 		
 	}
 	
-	public function test(){
 
-		$tokenObj= D('Token');
-		$accessToken=$tokenObj->getAccessToken();
-		if(empty($accessToken)){
-			echo $tokenObj->lassError;
-			return false;
-		}
-		var_dump($accessToken);
-
-		
-	}
-		public function test2(){
-			$a=array(
-			'exec'=>array('111'),
-			'test2'=>'zhihu',
-			'test'=>array('test'=>'eee','fff')
-			);
-			
-		 $FileConfigObj= new \Admin\Model\FileConfigModel('tags.php');
-		 $fileContents=$FileConfigObj->addConfigRecursive($a);
-		 $fileContents=$FileConfigObj->saveConfig();
-		 var_dump($fileContents);
-	}
 	
 }

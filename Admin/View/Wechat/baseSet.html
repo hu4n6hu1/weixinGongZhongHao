@@ -105,7 +105,7 @@ type="checkbox" class="ace"> <span class="lbl"></span>
 <td class="center"><label> <input
 type="checkbox" class="ace"> <span class="lbl"></span>
 </label></td>
-<th width="120">
+<th width="120" class="position" rank="{$menu.pid}">
 	<if condition="$menu.pid eq 0 ">处于一级目录<else /> {$menu.pid}</if>
 </th>
 <th width="100">{$menu.menu_id}</th>
@@ -116,10 +116,9 @@ type="checkbox" class="ace"> <span class="lbl"></span>
 <th width="200">{$menu.url}</th>
 <th>{$menu.key}</th>
 <th>{$menu.media_id}</th>
-<td><a
-href="javascript:void(0);" onclick="reWxmenu(this)"
-class="btn btn-white btn-sm">修改</a><a
-class="J_ajax_del btn btn-white btn-sm"
+<td>
+
+<a class="J_ajax_del btn btn-white btn-sm"
 href="{:U('Admin/Wechat/delMenu',array('id'=>$menu['menu_id']))}">删除</a></td>
 </tr>
 </volist>
@@ -207,19 +206,20 @@ type="submit">提交</button>
 <script type="text/javascript">
 function reWxmenu(o){
 var mediaId = $(o).parent().prev().html();
+console.log($(o).parent().prev())
 var key = $(o).parent().prev().prev().html();
 var url = $(o).parent().prev().prev().prev().html();
 var type = $(o).parent().prev().prev().prev().prev().html();
 var name = $(o).parent().prev().prev().prev().prev().prev().html();
 var menu_id = $(o).parent().prev().prev().prev().prev().prev().prev().html();
-var pid = $(o).parent().prev().prev().prev().prev().prev().prev().prev().html();
-
+var pid = $(o).parent().prev().prev().prev().prev().prev().prev().prev().attr('rank');
+console.log(pid);
 $('input[name="name"]').val(name);
 $('select[name="type"]').val(type);
 $('select[name="pid"]').val(pid);
 $('input[name="url"]').val(url);
 $('input[name="key"]').val(key);
-$('input[name="pid"]').val(pid);
+$('input[name="pid"]').text(pid);
 $('input[name="menu_id"]').val(menu_id);
 $('input[name="media_id"]').val(mediaId);
 $('#myTab li').eq(2).find('a').click();
@@ -254,9 +254,27 @@ $('#myTab li').eq(4).find('a').click();
 
 
 function init(){
-		  $('input[name="key"]').parent().parent().hide();
-	  $('input[name="media_id"]').parent().parent().hide();
-	  $('input[name="url"]').parent().parent().hide();
+	showSubDirectionName();
+	function showSubDirectionName(){
+		var positionList=$('.position');
+		var idList=positionList.next();
+		var count=positionList.length;
+	    for(i=0;i<count;i++){
+			var rank=positionList.eq(i).attr('rank');
+			for(j=0;j<count;j++){
+			    var id=idList.eq(j).html();
+				if(rank==id){
+					var name=idList.eq(j).next().html();
+					positionList.eq(i).html(name);
+				}
+			}
+		} 
+    
+	}
+    
+	$('input[name="key"]').parent().parent().hide();
+	$('input[name="media_id"]').parent().parent().hide();
+	$('input[name="url"]').parent().parent().hide();
 	function isTopMenu(){
 	var type=$('select[name="type"]').val();
 	if(type=="topMenu"){
@@ -276,6 +294,7 @@ function init(){
  $('select[name="type"]').change(isTopMenu);
 }
 $(window).ready(init);
+
 </script>
 </div>
 </div>

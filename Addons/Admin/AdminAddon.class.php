@@ -5,7 +5,7 @@
   use Think\Hook;
  class AdminAddon extends Controller  implements PluginInterface {
 	 protected $trueTableName = 'top_categories';
-	public function  init(&$arguments){
+	public function  init(){
 		 echo "admin plugin <br>";
 		$arguments['admin']='admin';
 	 }

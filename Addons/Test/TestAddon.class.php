@@ -4,11 +4,11 @@
  use Think\Controller;
   use Think\Hook;
  class TestAddon extends Controller  implements PluginInterface {
-	 protected $trueTableName = 'top_categories';
-	public function  init(&$arguments){
-		 echo "init ok<br>";
-		 $arguments['test']='test';
-		 return 'init';
+	public function  init(){
+		$baseDir=dirname(__FILE__);
+		$baseDir=str_replace('\\','/',$baseDir);
+		$baseDir=substr($baseDir,-1)=='/'?$baseDir:$baseDir.'/';
+		file_put_contents($baseDir.'/install.locks','');
 	 }
 	
 	public function getPluginInfo(){
@@ -18,12 +18,10 @@
 			return $pulginInfo;
 	}
 	
-
+	
 	public function executePlugin($arguments){
-		echo '插件执行成功'.$arguments;
+		echo '插件执行成功'.$arguments."<br>";
 		return $arguments;
-		/* $obj= new \Addons\Test\Model\TestModel();
-		$obj->test(); */
 	}
 	
 	
